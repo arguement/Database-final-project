@@ -15,8 +15,13 @@ def SignUp():
     form = SignUpForm()
     return render_template("signUp.html",form = form)
 
-@app.route("/home_page")
+@app.route("/home_page",methods =["GET","POST"])
 def store():
+    form = LoginForm()
+    if request.method == "POST" and form.validate_on_submit():
+        user = form.username.data
+        passw = form.password.data
+        return user + passw
     return "home page"
 
 
