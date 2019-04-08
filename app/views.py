@@ -19,10 +19,33 @@ def SignUp():
 def store():
     form = LoginForm()
     if request.method == "POST" and form.validate_on_submit():
+
+        cur = mysql.connection.cursor()
+        
+
         user = form.username.data
-        passw = form.password.data
+        passw = form.password.data + "\\"+"r"
+        print(passw)
+        query = f"SELECT * FROM branch_1.account where username = '{user}' and `password` ='{passw}' "
+        print(query)
+        result =cur.execute(query)
+        # rows = cur.fetchall()
+        if result == 0:
+            flash('Username or Password is incorrect.', 'danger')
+            return redirect(url_for("home"))
+        print(result)
         return user + passw
-    return "home page"
+    flash_errors(form)
+    return redirect(url_for("home"))
+
+@app.route("/signing-up",methods =["GET","POST"])
+def signing_up():
+    form = SignUpForm()
+    if request.method == "POST" and form.validate_on_submit():
+        cur = mysql.connection.cursor()
+    
+    flash_errors(form)
+    return redirect(url_for("SignUp"))
 
 
 @app.after_request
@@ -41,6 +64,14 @@ def add_header(response):
 def page_not_found(error):
     """Custom 404 page."""
     return render_template('404.html'), 404
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ), 'danger')
 
 
 if __name__ == '__main__':

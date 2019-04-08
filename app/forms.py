@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
-from wtforms.validators import DataRequired,Email,EqualTo
+from wtforms.validators import DataRequired,Email,EqualTo,Length
 
 
 class LoginForm(FlaskForm):
@@ -9,8 +9,8 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember me')
 
 class SignUpForm(FlaskForm):
-    fname = StringField('first name', validators=[DataRequired()])
-    lname = StringField('last name', validators=[DataRequired()])
+    fname = StringField('first name', validators=[DataRequired(),Length(5,15)])
+    lname = StringField('last name', validators=[DataRequired(),Length(5,15)])
     email = StringField('last name', validators=[DataRequired(),Email()])
     password = PasswordField('New Password', [
         DataRequired(),
