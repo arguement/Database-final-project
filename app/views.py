@@ -3,12 +3,22 @@ from flask import render_template,request,redirect,url_for,flash
 from werkzeug.utils import secure_filename
 import os
 from app import mysql
-from app.forms import LoginForm
+from app.forms import LoginForm,SignUpForm
 
 @app.route("/")
 def home():
     form = LoginForm()
     return render_template("login.html",form= form)
+
+@app.route("/sign_up")
+def SignUp():
+    form = SignUpForm()
+    return render_template("signUp.html",form = form)
+
+@app.route("/home_page")
+def store():
+    return "home page"
+
 
 @app.after_request
 def add_header(response):

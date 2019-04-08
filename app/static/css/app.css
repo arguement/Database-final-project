@@ -1,0 +1,8 @@
+.custom-middle {
+    display: flex;
+    justify-content: center;
+}
+
+.form-container{
+    width: 50%
+}

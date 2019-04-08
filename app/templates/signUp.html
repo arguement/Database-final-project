@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="login-form text-center custom-middle">
+
+        <div class="form-container">
+    
+          <h2>Sign Up</h2>
+          {% include 'flash_messages.html' %}
+          
+          <form action="" method="post" >
+                {{ form.csrf_token }}
+                <div class="form-group">
+                  {{ form.fname.label }}
+                  {{ form.fname(class='form-control', placeholder="John ") }}
+                </div>
+                <div class="form-group">
+                  {{ form.lname.label }}
+                  {{ form.lname(class='form-control',placeholder="Brown ") }}
+                </div>
+                <div class="form-group">
+                        {{ form.email.label }}
+                  {{ form.email(class='form-control',placeholder="johnbrown@gmail.com ")}} 
+                </div>
+                <div class="form-group">
+                        {{ form.password.label }}
+                        {{ form.password(class='form-control') }}
+                 </div>
+                 <div class="form-group">
+                        {{ form.confirm.label }}
+                        {{ form.confirm(class='form-control') }}
+                 </div>
+                <button type="submit" name="submit" class="btn btn-primary btn-block">Log in</button>
+              </form>
+
+        </div>
+</div>
+{% endblock %}
