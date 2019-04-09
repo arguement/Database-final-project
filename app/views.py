@@ -23,6 +23,18 @@ def purchase():
             amt = form.amt.data
 
             cur = mysql.connection.cursor()
+            to_use = [0,0]
+            for i in range(1,4):
+                pass
+                query = f"SELECT item_amt FROM branch_{i}.items WHERE itemId = {1}"
+                cur.execute(query)
+                val = cur.fetchone()[5]
+
+                if val > to_use[1]:
+                    to_use[1] = val
+                    to_use[0] = i
+            branch = to_use[0]
+            query = f"update branch_{branch}.items set item_amt = item_amt - {1} where itemId = {1} "
             
             return 'purchased'
         flash_errors(form)
@@ -46,6 +58,7 @@ def store():
 
         userfind = False
         queryToUse = ''
+        data = ''
         for i in range(1,4):
        
             query = f"SELECT * FROM branch_{i}.account where username = '{user}' and `password` ='{passw}' "
@@ -56,6 +69,7 @@ def store():
             if result > 0:
                 queryToUse = query
                 userfind = True
+                data = cur.fetchone()
                 break
         # lst.append(result)
         # lst.append( cur.execute(f"SELECT * FROM branch_2.account where username = '{user}' and `password` ='{passw}'")) 
@@ -68,7 +82,9 @@ def store():
             flash('Username or Password is incorrect.', 'danger') 
             return redirect(url_for("home"))
         
-        session['userid'] = 2
+        session['userid'] = data[0]
+        session['login'] = True
+        print(data)
         print(f"session is {session}")
         return user + passw
     flash_errors(form)
