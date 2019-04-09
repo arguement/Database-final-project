@@ -12,6 +12,7 @@ class SignUpForm(FlaskForm):
     fname = StringField('first name', validators=[DataRequired(),Length(5,15)])
     lname = StringField('last name', validators=[DataRequired(),Length(5,15)])
     email = StringField('last name', validators=[DataRequired(),Email()])
+    credit_card_no = StringField('credit card number', validators=[DataRequired(),Length(8,16)])
     password = PasswordField('New Password', [
         DataRequired(),
         EqualTo('confirm', message='Passwords must match')

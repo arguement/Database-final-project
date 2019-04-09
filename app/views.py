@@ -43,6 +43,10 @@ def signing_up():
     form = SignUpForm()
     if request.method == "POST" and form.validate_on_submit():
         cur = mysql.connection.cursor()
+        fname = form.fname.data
+        lname = form.lname.data
+        email = form.credit_card_no.data
+        password = form.pas
     
     flash_errors(form)
     return redirect(url_for("SignUp"))
