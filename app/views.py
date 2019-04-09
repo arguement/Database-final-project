@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template,request,redirect,url_for,flash,session
+from flask import render_template,request,redirect,url_for,flash,session,jsonify
 from werkzeug.utils import secure_filename
 import os
 from app import mysql
@@ -9,6 +9,16 @@ from app.forms import LoginForm,SignUpForm,PurchaseForm
 def home():
     form = LoginForm()
     return render_template("login.html",form= form)
+
+@app.route("/search")
+def search():
+    return render_template("search.html")
+
+@app.route("/get_items", methods=['GET'])
+def get_items():
+    user = {"name": "Mr. Anonymous Unsecure"}
+    return jsonify(data={"user": user}, message="Success")
+
 
 @app.route("/item_purchase",methods=["POST","GET"])
 def purchase():

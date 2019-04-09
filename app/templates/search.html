@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block js %} 
+
+<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+{% endblock%}
+
+{% block main %}
+
+<div id="search">
+    [[test]]
+        <div class="form-inline d-flex justify-content-center">
+            <div class="form-group mx-sm-3 mb-2">
+        
+                <label class="sr-only" for="search">Search</label>
+        
+                <input type="search" name="search" 
+                id="search" class="form-control mb-2 mr-sm-2" placeholder="Enter
+                search term here"  />
+        
+                <button class="btn btn-primary mb-2" v-on:click="search()" > Search </button>
+        
+        </div>
+</div>
+    
+  </div>
+
+{% endblock %}
+
