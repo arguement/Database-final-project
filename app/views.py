@@ -17,7 +17,19 @@ def search():
 @app.route("/get_items", methods=['GET'])
 def get_items():
     user = {"name": "Mr. Anonymous Unsecure"}
-    return jsonify(data={"user": user}, message="Success")
+    items = []
+    cur = mysql.connection.cursor()
+    for i in range(1,4):
+
+        query = f"SELECT brand,item_name,item_type,item_amt  FROM branch_{i}.items limit 5 "
+        cur.execute(query)
+        res = cur.fetchall()
+        for rows in res:
+            items.append( {"brand":rows[0],"item_name":rows[1],"item_type":rows[2],"item_amt":rows[3] } )
+
+
+    return jsonify( items )
+    # return jsonify(data={"user": user}, message="Success")
 
 
 @app.route("/item_purchase",methods=["POST","GET"])

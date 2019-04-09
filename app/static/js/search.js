@@ -1,10 +1,12 @@
 new Vue({
     el: "#search",
     data : {
-        test: 'jordan'
+        test: 'jordan',
+        laptops: []
     },
     delimiters: ['[[',']]'],
     created: function(){
+        self = this
         console.log("jordan")
         fetch('/get_items')
         .then(function(response) {
@@ -12,7 +14,7 @@ new Vue({
            return response.json();
         })
         .then(function(data) {
-
+            self.laptops = data
            console.log(data);
            
         });
