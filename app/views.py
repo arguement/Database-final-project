@@ -42,15 +42,51 @@ def store():
 def signing_up():
     form = SignUpForm()
     if request.method == "POST" and form.validate_on_submit():
-        cur = mysql.connection.cursor()
+        # cur = mysql.connection.cursor()
         fname = form.fname.data
         lname = form.lname.data
-        email = form.credit_card_no.data
-        password = form.pas
-    
+        credit_card = form.credit_card_no.data
+        password = form.password.data
+        branch = form.branch.data
+        email = form.email.data
+        add_sign_up_data_to_branch(branch,fname,lname,credit_card,password,email)
     flash_errors(form)
     return redirect(url_for("SignUp"))
 
+def add_sign_up_data_to_branch(branch,fname,lname,credit_card,password,email):
+    password = password + "\\"+"r"
+    credit_card = credit_card + "\\"+"r"
+    cur = mysql.connection.cursor()
+    query = ""
+    if branch == "Branch 1":
+        checkuser = cur.execute(f"select * from develop.account where username= '{email}' ")
+        if checkuser > 0:
+            flash("email already exist","danger")
+            return redirect(url_for("SignUp"))
+        
+        checkuser = cur.execute(f"select * from develop.customer where credit_card_no = '{credit_card}' ")
+        if checkuser > 0:
+            flash("credit card already exist","danger")
+            return redirect(url_for("SignUp"))
+
+        query = f"insert into develop.account(username,password) values('{email}' ,'{password}') "
+        cur.execute(query)
+        mysql.connection.commit()
+        query2 = f"insert into develop.customer(lname,fname,credit_card_no) values('{lname}' ,'{fname}','{credit_card}')"
+        cur.execute(query2)
+        mysql.connection.commit()
+        query3 = f"select account_id from develop.account where username = '{email}' and password = '{password}' "
+        account_id = cur.execute(query3)
+        
+        print(f"customerId is {cur.fetchall()}")
+        query4 = f"select customerId from develop.customer where lname = '{lname}' and fname= '{fname}' and  credit_card_no = '{credit_card}'  "
+        customerId = cur.execute(query4)
+        print(f"customerId is {cur.fetchall()}")
+        mysql.connection.commit()
+    elif branch == "Branch 2":
+        pass
+    else:
+        pass
 
 @app.after_request
 def add_header(response):
