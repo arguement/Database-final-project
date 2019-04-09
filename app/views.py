@@ -3,12 +3,22 @@ from flask import render_template,request,redirect,url_for,flash
 from werkzeug.utils import secure_filename
 import os
 from app import mysql
-from app.forms import LoginForm,SignUpForm
+from app.forms import LoginForm,SignUpForm,PurchaseForm
 
 @app.route("/")
 def home():
     form = LoginForm()
     return render_template("login.html",form= form)
+
+@app.route("/item_purchase",methods=["POST","GET"])
+def purchase():
+    form = PurchaseForm()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            return 'purchased'
+        flash_errors(form)
+        return redirect(url_for("purchase"))
+    return render_template("item.html",form=form)
 
 @app.route("/sign_up")
 def SignUp():
@@ -50,6 +60,7 @@ def signing_up():
         branch = form.branch.data
         email = form.email.data
         add_sign_up_data_to_branch(branch,fname,lname,credit_card,password,email)
+        return 'diandra screen'
     flash_errors(form)
     return redirect(url_for("SignUp"))
 
@@ -59,34 +70,98 @@ def add_sign_up_data_to_branch(branch,fname,lname,credit_card,password,email):
     cur = mysql.connection.cursor()
     query = ""
     if branch == "Branch 1":
-        checkuser = cur.execute(f"select * from develop.account where username= '{email}' ")
+        checkuser = cur.execute(f"select * from branch_1.account where username= '{email}' ")
         if checkuser > 0:
             flash("email already exist","danger")
             return redirect(url_for("SignUp"))
         
-        checkuser = cur.execute(f"select * from develop.customer where credit_card_no = '{credit_card}' ")
+        checkuser = cur.execute(f"select * from branch_1.customer where credit_card_no = '{credit_card}' ")
         if checkuser > 0:
             flash("credit card already exist","danger")
             return redirect(url_for("SignUp"))
 
-        query = f"insert into develop.account(username,password) values('{email}' ,'{password}') "
+        query = f"insert into branch_1.account(username,password) values('{email}' ,'{password}') "
         cur.execute(query)
-        mysql.connection.commit()
-        query2 = f"insert into develop.customer(lname,fname,credit_card_no) values('{lname}' ,'{fname}','{credit_card}')"
-        cur.execute(query2)
-        mysql.connection.commit()
-        query3 = f"select account_id from develop.account where username = '{email}' and password = '{password}' "
-        account_id = cur.execute(query3)
         
-        print(f"customerId is {cur.fetchall()}")
-        query4 = f"select customerId from develop.customer where lname = '{lname}' and fname= '{fname}' and  credit_card_no = '{credit_card}'  "
+        query2 = f"insert into branch_1.customer(lname,fname,credit_card_no) values('{lname}' ,'{fname}','{credit_card}')"
+        cur.execute(query2)
+        
+        query3 = f"select account_id from branch_1.account where username = '{email}' and password = '{password}' "
+
+        account_id = cur.execute(query3)
+        account_id = cur.fetchone()[0]
+        print(f"customerId is {account_id }")
+
+        query4 = f"select customerId from branch_1.customer where lname = '{lname}' and fname= '{fname}' and  credit_card_no = '{credit_card}'  "
+
         customerId = cur.execute(query4)
-        print(f"customerId is {cur.fetchall()}")
+        customerId = cur.fetchone()[0]
+        print(f"customerId is {customerId}")
+        query5 = f"insert into branch_1.owns values({customerId},{account_id})"
+        cur.execute(query5)
         mysql.connection.commit()
     elif branch == "Branch 2":
-        pass
+        checkuser = cur.execute(f"select * from branch_2.account where username= '{email}' ")
+        if checkuser > 0:
+            flash("email already exist","danger")
+            return redirect(url_for("SignUp"))
+        
+        checkuser = cur.execute(f"select * from branch_2.customer where credit_card_no = '{credit_card}' ")
+        if checkuser > 0:
+            flash("credit card already exist","danger")
+            return redirect(url_for("SignUp"))
+
+        query = f"insert into branch_2.account(username,password) values('{email}' ,'{password}') "
+        cur.execute(query)
+        
+        query2 = f"insert into branch_2.customer(lname,fname,credit_card_no) values('{lname}' ,'{fname}','{credit_card}')"
+        cur.execute(query2)
+        
+        query3 = f"select account_id from branch_2.account where username = '{email}' and password = '{password}' "
+
+        account_id = cur.execute(query3)
+        account_id = cur.fetchone()[0]
+        print(f"customerId is {account_id }")
+
+        query4 = f"select customerId from branch_2.customer where lname = '{lname}' and fname= '{fname}' and  credit_card_no = '{credit_card}'  "
+
+        customerId = cur.execute(query4)
+        customerId = cur.fetchone()[0]
+        print(f"customerId is {customerId}")
+        query5 = f"insert into branch_2.owns values({customerId},{account_id})"
+        cur.execute(query5)
+        mysql.connection.commit()
     else:
-        pass
+        checkuser = cur.execute(f"select * from branch_2.account where username= '{email}' ")
+        if checkuser > 0:
+            flash("email already exist","danger")
+            return redirect(url_for("SignUp"))
+        
+        checkuser = cur.execute(f"select * from branch_2.customer where credit_card_no = '{credit_card}' ")
+        if checkuser > 0:
+            flash("credit card already exist","danger")
+            return redirect(url_for("SignUp"))
+
+        query = f"insert into branch_2.account(username,password) values('{email}' ,'{password}') "
+        cur.execute(query)
+        
+        query2 = f"insert into branch_2.customer(lname,fname,credit_card_no) values('{lname}' ,'{fname}','{credit_card}')"
+        cur.execute(query2)
+        
+        query3 = f"select account_id from branch_2.account where username = '{email}' and password = '{password}' "
+
+        account_id = cur.execute(query3)
+        account_id = cur.fetchone()[0]
+        print(f"customerId is {account_id }")
+
+        query4 = f"select customerId from branch_1.customer where lname = '{lname}' and fname= '{fname}' and  credit_card_no = '{credit_card}'  "
+
+        customerId = cur.execute(query4)
+        customerId = cur.fetchone()[0]
+        print(f"customerId is {customerId}")
+        query5 = f"insert into branch_1.owns values({customerId},{account_id})"
+        cur.execute(query5)
+        mysql.connection.commit()
 
 @app.after_request
 def add_header(response):

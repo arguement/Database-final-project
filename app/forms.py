@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField,SelectField
+from wtforms import StringField, PasswordField, BooleanField,SelectField,IntegerField
 from wtforms.validators import DataRequired,Email,EqualTo,Length
 
 
@@ -20,3 +20,11 @@ class SignUpForm(FlaskForm):
         EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Repeat Password')
+
+class PurchaseForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    credit_card = IntegerField('credit card number', validators=[DataRequired(),Length(8,16)])
+    amt = IntegerField("amount",validators=[DataRequired()])
+    
+    

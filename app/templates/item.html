@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block js %} 
+
+<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+{% endblock%}
+
+{% block main %}
+  <div class="login-form text-center custom-middle">
+
+    <div class="form-container">
+
+      <h4>purchase of item [[ mess ]]</h4>
+
+      <h4 v-if="amount > 0">price is [[ price * amount ]]</h4>
+
+      {% include 'flash_messages.html' %}
+
+      <form action="{{ url_for('purchase') }}" method="POST" id="uploadForm">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="email" class="form-control" id="username" name="username" placeholder="user" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" name="password" id="password" required>
+        </div>
+        <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amt" v-model="amount">
+        </div>
+        <div class="form-group">
+            <label for="amount">Credit card number</label>
+            <input type="number" class="form-control" id="credit"  name="credit_card">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    </div>
+  </div>
+{% endblock %}
