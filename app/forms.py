@@ -24,7 +24,7 @@ class SignUpForm(FlaskForm):
 class PurchaseForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    credit_card = IntegerField('credit card number', validators=[DataRequired(),Length(8,16)])
+    credit_card = StringField('credit card number', validators=[DataRequired(),Length(8,16)])
     amt = IntegerField("amount",validators=[DataRequired()])
     
     

@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template,request,redirect,url_for,flash
+from flask import render_template,request,redirect,url_for,flash,session
 from werkzeug.utils import secure_filename
 import os
 from app import mysql
@@ -15,6 +15,15 @@ def purchase():
     form = PurchaseForm()
     if request.method == "POST":
         if form.validate_on_submit():
+           # cur = mysql.connection.cursor()
+
+            username = form.username.data
+            password = form.password.data
+            credit = form.credit_card.data
+            amt = form.amt.data
+
+            cur = mysql.connection.cursor()
+            
             return 'purchased'
         flash_errors(form)
         return redirect(url_for("purchase"))
@@ -31,19 +40,36 @@ def store():
     if request.method == "POST" and form.validate_on_submit():
 
         cur = mysql.connection.cursor()
-        
 
         user = form.username.data
         passw = form.password.data + "\\"+"r"
-        print(passw)
-        query = f"SELECT * FROM branch_1.account where username = '{user}' and `password` ='{passw}' "
-        print(query)
-        result =cur.execute(query)
+
+        userfind = False
+        queryToUse = ''
+        for i in range(1,4):
+       
+            query = f"SELECT * FROM branch_{i}.account where username = '{user}' and `password` ='{passw}' "
+            print(query)
+            
+            result =cur.execute(query)
+            print(result)
+            if result > 0:
+                queryToUse = query
+                userfind = True
+                break
+        # lst.append(result)
+        # lst.append( cur.execute(f"SELECT * FROM branch_2.account where username = '{user}' and `password` ='{passw}'")) 
+        # lst.append( cur.execute(f"SELECT * FROM branch_3.account where username = '{user}' and `password` ='{passw}'")) 
+
         # rows = cur.fetchall()
-        if result == 0:
-            flash('Username or Password is incorrect.', 'danger')
+        # branch = 1
+        
+        if user == False:
+            flash('Username or Password is incorrect.', 'danger') 
             return redirect(url_for("home"))
-        print(result)
+        
+        session['userid'] = 2
+        print(f"session is {session}")
         return user + passw
     flash_errors(form)
     return redirect(url_for("home"))
@@ -53,6 +79,7 @@ def signing_up():
     form = SignUpForm()
     if request.method == "POST" and form.validate_on_submit():
         # cur = mysql.connection.cursor()
+        
         fname = form.fname.data
         lname = form.lname.data
         credit_card = form.credit_card_no.data
