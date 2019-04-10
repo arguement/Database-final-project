@@ -32,6 +32,9 @@ new Vue({
            console.log(data);
            
         });
+        },
+        run: function(name){
+            window.location.href = `/item_purchase/${name} `;
         }
     }
 });
