@@ -2,7 +2,8 @@ new Vue({
     el: "#search",
     data : {
         test: 'jordan',
-        laptops: []
+        laptops: [],
+        query: ''
     },
     delimiters: ['[[',']]'],
     created: function(){
@@ -35,6 +36,19 @@ new Vue({
         },
         run: function(name){
             window.location.href = `/item_purchase/${name} `;
+        },
+        querys: function(){
+            self = this;
+            fetch(`/get_specific_item/${self.query}`)
+        .then(function(response) {
+
+           return response.json();
+        })
+        .then(function(data) {
+            self.laptops = data
+          
+           
+        });
         }
     }
 });

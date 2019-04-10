@@ -81,6 +81,17 @@ def purchase(id = None):
                 return render_template("item.html",form =form,branch = branch,name= name, types = types,amt = amt,price = price,id=id)
     return render_template("item.html",form=form)
 
+@app.route("/get_specific_item/<item>")
+def get_item(item):
+    cur = mysql.connection.cursor()
+    query = f"SELECT brand,item_name,item_type,item_amt,itemId FROM branch_1.items WHERE item_name like '%{ item }%'"
+    res = cur.execute(query)
+    rows = cur.fetchone()
+    item = {"brand":rows[0],"item_name":rows[1],"item_type":rows[2],"item_amt":rows[3],"itemId":rows[4] } 
+    print("here")
+    return jsonify( [item] )
+
+
 @app.route("/sign_up")
 def SignUp():
     form = SignUpForm()
