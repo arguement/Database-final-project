@@ -3,6 +3,11 @@
 {% block js %} 
 
 <script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+<script>
+const data = "{{ price }}" ;
+const name = "{{ name }}";
+
+</script>
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
 {% endblock%}
@@ -23,6 +28,10 @@
         <div class="form-group">
             <label for="username">Username</label>
             <input type="email" class="form-control" id="username" name="username" placeholder="user" required>
+        </div>
+        <div class="form-group">
+            
+            <input type="hidden" class="form-control" id="username" name="id" placeholder="user" value = "{{ id }}" >
         </div>
         <div class="form-group">
             <label for="password">Password</label>

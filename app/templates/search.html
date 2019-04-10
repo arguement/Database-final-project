@@ -23,6 +23,19 @@
                 <button class="btn btn-primary mb-2" v-on:click="search()" > Search </button>
         
         </div>
+        <div class="card-deck flex-for-search_view" onclick = " window.location.href = '/item_purchase/[[]] '">
+                <div class="card" v-for="i in laptops">
+                  <img class="card-img-top" src="" alt="Card image cap">
+                  <div class="card-body">
+                    <h5 class="card-title">[[ i.brand ]]</h5>
+                    <h5 class="card-title">[[ i.item_name ]]</h5>
+                  </div>
+                  <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                  </div>
+                </div>
+               
+              </div>
 </div>
     
   </div>

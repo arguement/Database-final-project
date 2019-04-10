@@ -15,7 +15,7 @@ new Vue({
         })
         .then(function(data) {
             self.laptops = data
-           console.log(data);
+          
            
         });
     },
@@ -25,7 +25,7 @@ new Vue({
         fetch('/get_items')
         .then(function(response) {
 
-           return response.json();
+           return response;
         })
         .then(function(data) {
 

@@ -16,24 +16,24 @@ def search():
 
 @app.route("/get_items", methods=['GET'])
 def get_items():
-    user = {"name": "Mr. Anonymous Unsecure"}
     items = []
     cur = mysql.connection.cursor()
     for i in range(1,4):
 
-        query = f"SELECT brand,item_name,item_type,item_amt  FROM branch_{i}.items limit 5 "
+        query = f"SELECT brand,item_name,item_type,item_amt,itemId  FROM branch_{i}.items limit 5 "
         cur.execute(query)
         res = cur.fetchall()
         for rows in res:
-            items.append( {"brand":rows[0],"item_name":rows[1],"item_type":rows[2],"item_amt":rows[3] } )
+            items.append( {"brand":rows[0],"item_name":rows[1],"item_type":rows[2],"item_amt":rows[3],"itemId":rows[4] } )
 
 
     return jsonify( items )
     # return jsonify(data={"user": user}, message="Success")
 
-
+@app.route("/item_purchase/<id>",methods=["POST","GET"])
 @app.route("/item_purchase",methods=["POST","GET"])
-def purchase():
+def purchase(id = None):
+    print(id)
     form = PurchaseForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -43,24 +43,42 @@ def purchase():
             password = form.password.data
             credit = form.credit_card.data
             amt = form.amt.data
-
+            id = request.form["id"]
             cur = mysql.connection.cursor()
             to_use = [0,0]
             for i in range(1,4):
-                pass
-                query = f"SELECT item_amt FROM branch_{i}.items WHERE itemId = {1}"
+                print("arrives")
+                query = f"SELECT item_amt FROM branch_{i}.items WHERE itemId = {id}"
                 cur.execute(query)
-                val = cur.fetchone()[5]
+                val = int( cur.fetchone()[0] )
 
                 if val > to_use[1]:
                     to_use[1] = val
                     to_use[0] = i
             branch = to_use[0]
-            query = f"update branch_{branch}.items set item_amt = item_amt - {1} where itemId = {1} "
+            val = to_use[1]
+            query = f"update branch_{branch}.items set item_amt = item_amt - {val} where itemId = {id} "
             
             return 'purchased'
+
+    
+
         flash_errors(form)
         return redirect(url_for("purchase"))
+
+    if not id == None:
+        cur = mysql.connection.cursor()
+        for i in range(1,4):
+            query = f"SELECT * FROM branch_{i}.items WHERE itemId = {id}"
+            res = cur.execute(query)
+            if res > 0:
+                row = cur.fetchone() 
+                branch = row[1]
+                name = row[2]
+                types = row[3]
+                amt = int(row[4])
+                price = int(row[5])
+                return render_template("item.html",form =form,branch = branch,name= name, types = types,amt = amt,price = price,id=id)
     return render_template("item.html",form=form)
 
 @app.route("/sign_up")
@@ -81,6 +99,7 @@ def store():
         userfind = False
         queryToUse = ''
         data = ''
+        result = 0
         for i in range(1,4):
        
             query = f"SELECT * FROM branch_{i}.account where username = '{user}' and `password` ='{passw}' "
@@ -93,6 +112,10 @@ def store():
                 userfind = True
                 data = cur.fetchone()
                 break
+        if result == 0:
+            flash('Username or Password is incorrect.', 'danger') 
+            return redirect(url_for("home"))
+
         # lst.append(result)
         # lst.append( cur.execute(f"SELECT * FROM branch_2.account where username = '{user}' and `password` ='{passw}'")) 
         # lst.append( cur.execute(f"SELECT * FROM branch_3.account where username = '{user}' and `password` ='{passw}'")) 
