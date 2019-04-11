@@ -202,6 +202,7 @@ def signing_up():
         branch = form.branch.data
         email = form.email.data
         add_sign_up_data_to_branch(branch,fname,lname,credit_card,password,email)
+        flash("account created","success")
         return redirect(url_for("home"))
     flash_errors(form)
     return redirect(url_for("SignUp"))
