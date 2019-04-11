@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 import os
 from app import mysql
 from app.forms import LoginForm,SignUpForm,PurchaseForm
+from datetime import datetime
 
 @app.route("/")
 def home():
@@ -44,6 +45,7 @@ def purchase(id = None):
             credit = form.credit_card.data
             amt = form.amt.data
             id = request.form["id"]
+            print(f"id is {id}")
             cur = mysql.connection.cursor()
             to_use = [0,0]
             for i in range(1,4):
@@ -56,10 +58,28 @@ def purchase(id = None):
                     to_use[1] = val
                     to_use[0] = i
             branch = to_use[0]
-            val = to_use[1]
-            query = f"update branch_{branch}.items set item_amt = item_amt - {val} where itemId = {id} "
-            
-            return 'purchased'
+            val = to_use[1] 
+            query = f"update branch_{branch}.items set item_amt = item_amt - {amt} where itemId = {id}"
+            cur.execute(query)
+            print("first")
+            #query = f"inse"
+            # print(session['userid'])
+            cusid = 1 # dummy customer id
+            # pucrhase table (itemId 	customerId 	purchase_amt )
+            # query = f'insert into purchase values({id},{cusid},{amt})'
+            query = f"select item_name,price from branch_{branch}.items where itemId = {id} "
+            cur.execute(query)
+            res = cur.fetchone()
+            print("second")
+            query = f"insert into branch_{branch}.receipt( itemId,customerId ) values( {id},{cusid} )"
+            cur.execute(query)
+            # query to get the receit id 
+            query = f"select receipt_num from branch_{branch}.receipt where itemId = {id} and customerId={cusid}"
+            cur.execute(query)
+            receipt_num = cur.fetchone()[0]
+
+            flash("purchase complete","success")
+            return render_template("receipt.html",item_name=res[0],price =res[1],amt = amt,id=id,receipt_num=receipt_num)
 
     
 
@@ -159,7 +179,7 @@ def signing_up():
         branch = form.branch.data
         email = form.email.data
         add_sign_up_data_to_branch(branch,fname,lname,credit_card,password,email)
-        return 'diandra screen'
+        return redirect(url_for("home"))
     flash_errors(form)
     return redirect(url_for("SignUp"))
 
@@ -274,10 +294,16 @@ def add_header(response):
     return response
 
 
-@app.errorhandler(404)
-def page_not_found(error):
-    """Custom 404 page."""
-    return render_template('404.html'), 404
+# @app.errorhandler(404)
+# def page_not_found(error):
+#     """Custom 404 page."""
+#     return render_template('404.html'), 404
+
+@app.context_processor
+def utility_processor():
+    def getDate():
+        return datetime.today().strftime('%Y-%m-%d')
+    return dict(getDate=getDate)
 
 def flash_errors(form):
     for field, errors in form.errors.items():
