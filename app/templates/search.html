@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block js %} 
+
+<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+{% endblock%}
+
+{% block main %}
+
+<div id="search">
+    
+        <div class="form-inline d-flex justify-content-center">
+            <div class="form-group mx-sm-3 mb-2">
+        
+                <label class="sr-only" for="search">Search</label>
+        
+                <input type="search" name="search" 
+                id="search" class="form-control mb-2 mr-sm-2" placeholder="Enter
+                search term here"  v-model="query"  />
+        
+                <button class="btn btn-primary mb-2" @click="querys" > Search </button>
+        
+        </div>
+        <div class="card-deck flex-for-search_view" >
+                <div class="card" v-for="i in laptops" @click="run( [[ i.itemId ]] )">
+                  <img class="card-img-top" src="" alt="Card image cap">
+                  <div class="card-body">
+                    <h5 class="card-title">[[ i.brand ]]</h5>
+                    <h5 class="card-title">[[ i.item_name ]]</h5>
+                  </div>
+                  <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                  </div>
+                </div>
+               
+              </div>
+</div>
+    
+  </div>
+
+{% endblock %}
+
