@@ -22,8 +22,8 @@ class SignUpForm(FlaskForm):
     confirm = PasswordField('Repeat Password')
 
 class PurchaseForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    # username = StringField('Username', validators=[DataRequired()])
+    # password = PasswordField('Password', validators=[DataRequired()])
     credit_card = StringField('credit card number', validators=[DataRequired(),Length(8,16)])
     amt = IntegerField("amount",validators=[DataRequired()])
     

@@ -11,6 +11,27 @@ def home():
     form = LoginForm()
     return render_template("login.html",form= form)
 
+@app.route("/",methods=["POST","GET"])
+def comment_sub():
+    if request.method == "POST":
+
+        cur = mysql.connection.cursor()
+
+        item_name = request.form["item_name"]
+        cusid = request.form["cusid"]
+        id = request.form["id"]
+        comment = request.form["comment"]
+        branch = request.form["branchnum"]
+        cur = mysql.connection.cursor()
+        query = f"select fname,lname from branch_{branch}.customer where customerId = {cusid} "
+        cur.execute(query)
+        res = cur.fetchone()
+        fname = res[0]
+        lname = res[1]
+        fullname = fname + " "+ lname
+        return render_template("comments.html",fullname=fullname,comment=comment)
+    return 'comment not added'
+
 @app.route("/search")
 def search():
     return render_template("search.html")
@@ -40,8 +61,8 @@ def purchase(id = None):
         if form.validate_on_submit():
            # cur = mysql.connection.cursor()
 
-            username = form.username.data
-            password = form.password.data
+            # username = form.username.data
+            # password = form.password.data
             credit = form.credit_card.data
             amt = form.amt.data
             id = request.form["id"]
@@ -79,7 +100,7 @@ def purchase(id = None):
             receipt_num = cur.fetchone()[0]
 
             flash("purchase complete","success")
-            return render_template("receipt.html",item_name=res[0],price =res[1],amt = amt,id=id,receipt_num=receipt_num)
+            return render_template("receipt.html",item_name=res[0],price =res[1],amt = amt,id=id,receipt_num=receipt_num,cusid=cusid,branchnum=branch)
 
     
 
@@ -99,6 +120,7 @@ def purchase(id = None):
                 amt = int(row[4])
                 price = int(row[5])
                 return render_template("item.html",form =form,branch = branch,name= name, types = types,amt = amt,price = price,id=id)
+    flash_errors(form)
     return render_template("item.html",form=form)
 
 @app.route("/get_specific_item/<item>")
@@ -142,6 +164,7 @@ def store():
                 queryToUse = query
                 userfind = True
                 data = cur.fetchone()
+                session['branch'] = i
                 break
         if result == 0:
             flash('Username or Password is incorrect.', 'danger') 
