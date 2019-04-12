@@ -3,7 +3,8 @@ new Vue({
     data : {
         test: 'jordan',
         laptops: [],
-        query: ''
+        query: '',
+        times: 0
     },
     delimiters: ['[[',']]'],
     created: function(){

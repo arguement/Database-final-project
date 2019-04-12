@@ -44,11 +44,11 @@ def get_items():
     cur = mysql.connection.cursor()
     for i in range(1,4):
 
-        query = f"SELECT brand,item_name,item_type,item_amt,itemId  FROM branch_{i}.items limit 5 "
+        query = f"SELECT brand,item_name,item_type,item_amt,itemId,price  FROM branch_{i}.items limit 5 "
         cur.execute(query)
         res = cur.fetchall()
         for rows in res:
-            items.append( {"brand":rows[0],"item_name":rows[1],"item_type":rows[2],"item_amt":rows[3],"itemId":rows[4] } )
+            items.append( {"brand":rows[0],"item_name":rows[1],"item_type":rows[2],"item_amt":rows[3],"itemId":rows[4],"price":rows[5] } )
 
 
     return jsonify( items )
@@ -87,7 +87,7 @@ def purchase(id = None):
             print("first")
             #query = f"inse"
             # print(session['userid'])
-            cusid = 1 # dummy customer id
+            cusid = session["userid"] # dummy customer id
             # pucrhase table (itemId 	customerId 	purchase_amt )
             # query = f'insert into purchase values({id},{cusid},{amt})'
             query = f"select item_name,price from branch_{branch}.items where itemId = {id} "
