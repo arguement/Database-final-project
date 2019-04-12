@@ -69,7 +69,9 @@ def purchase(id = None):
 
             # username = form.username.data
             # password = form.password.data
-            credit = form.credit_card.data
+            temp_id = session['userid']
+            
+            credit = form.credit_card.data + "\\"+"r"
             amt = form.amt.data
             id = request.form["id"]
             print(f"id is {id}")
@@ -84,6 +86,16 @@ def purchase(id = None):
                 if val > to_use[1]:
                     to_use[1] = val
                     to_use[0] = i
+                    newquery = f"select customerId from branch_{i}.owns where account_id = {temp_id} " 
+                    cur.execute(newquery)
+                    another_id = cur.fetchone()[0]
+                    newquery = f"select customerId from branch_{i}.customer where customerId = {another_id} and credit_card_no = '{credit}' " 
+                    new_res = cur.execute(newquery)
+                    if new_res == 0:
+                        flash("credit card doesnt match username","danger")
+                        return redirect(url_for('purchase',id = id))
+
+
             branch = to_use[0]
             val = to_use[1] 
             query = f"update branch_{branch}.items set item_amt = item_amt - {amt} where itemId = {id}"
@@ -111,7 +123,8 @@ def purchase(id = None):
     
 
         flash_errors(form)
-        return redirect(url_for("purchase"))
+        # return redirect(url_for("purchase"))
+        return redirect(url_for('purchase',id = id))
 
     if not id == None:
         cur = mysql.connection.cursor()
