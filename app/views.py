@@ -21,7 +21,7 @@ def comment_sub():
         cusid = request.form["cusid"]
         id = request.form["id"]
         comment = request.form["comment"]
-        branch = request.form["branchnum"]
+        branch = session['branch']
         cur = mysql.connection.cursor()
         query = f"select fname,lname from branch_{branch}.customer where customerId = {cusid} "
         cur.execute(query)
