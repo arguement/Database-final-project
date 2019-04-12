@@ -29,6 +29,10 @@ def comment_sub():
         fname = res[0]
         lname = res[1]
         fullname = fname + " "+ lname
+        print("here")
+        query = f"insert into branch_{branch}.review(customerId,comments ) values({cusid},'{comment}')"
+        print(query)
+        cur.execute(query)
         return render_template("comments.html",fullname=fullname,comment=comment)
     return 'comment not added'
 
