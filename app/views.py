@@ -144,6 +144,12 @@ def get_item(item):
 def SignUp():
     form = SignUpForm()
     return render_template("signUp.html",form = form)
+@app.route("/logout")
+def logout():
+    session["login"] = False
+    var = session["login"]
+    print(f"session is {var}")
+    return redirect(url_for('home'))
 
 @app.route("/home_page",methods =["GET","POST"])
 def store():
@@ -188,10 +194,14 @@ def store():
             return redirect(url_for("home"))
         
         session['userid'] = data[0]
+        query = f"select fname from branch_{session['branch']}.customer where customerId = {data[0]} "
+        cur.execute(query)
+        nameF = cur.fetchone()[0]
         session['login'] = True
+        session["name"] = nameF
         print(data)
         print(f"session is {session}")
-        return render_template("home_page.html")
+        return render_template("home_page.html",name=nameF)
     flash_errors(form)
     return redirect(url_for("home"))
 
@@ -338,7 +348,11 @@ def add_header(response):
 def utility_processor():
     def getDate():
         return datetime.today().strftime('%Y-%m-%d')
-    return dict(getDate=getDate)
+    def checkSession():
+        return session["login"]
+    def getLoginName():
+        return session["name"]
+    return dict(getDate=getDate,checkSession=checkSession,getLoginName=getLoginName)
 
 def flash_errors(form):
     for field, errors in form.errors.items():
