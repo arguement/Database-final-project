@@ -36,6 +36,8 @@ def comment_sub():
 def search():
     return render_template("search.html")
 
+    
+
 @app.route("/get_items", methods=['GET'])
 def get_items():
     items = []
@@ -185,9 +187,14 @@ def store():
         session['login'] = True
         print(data)
         print(f"session is {session}")
-        return user + passw
+        return render_template("home_page.html")
     flash_errors(form)
     return redirect(url_for("home"))
+
+@app.route("/testing_home")
+def test():
+    return render_template("home_page.html")
+
 
 @app.route("/signing-up",methods =["GET","POST"])
 def signing_up():
