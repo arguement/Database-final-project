@@ -30,10 +30,20 @@ def comment_sub():
         lname = res[1]
         fullname = fname + " "+ lname
         print("here")
-        query = f"insert into branch_{session['branch']}.review(customerId,comments ) values({cusid},'{comment}')"
+        # customerId 	itemId 	comments 	review_id
+        query = f"insert into branch_{session['branch']}.review(customerId,itemId,comments ) values({cusid},{id},'{comment}')"
+        
         print(query)
         cur.execute(query)
-        return render_template("comments.html",fullname=fullname,comment=comment)
+        all_comments = []
+        for i in range(1,4):
+            query = f"select comments,fname,itemId from branch_{i}.review join branch_{i}.customer on branch_{i}.review.customerId = branch_{i}.customer.customerId and branch_{i}.review.itemId={id} "
+            cur.execute(query)
+            rows = cur.fetchall()
+            for j in rows:
+                tup = (j[1],j[0])
+                all_comments.append(tup)
+        return render_template("comments.html",fullname=fullname,comment=comment,all_comments=all_comments)
     return 'comment not added'
 
 @app.route("/search")
@@ -145,7 +155,7 @@ def purchase(id = None):
                 price = int(row[5])
                 return render_template("item.html",form =form,branch = branch,name= name, types = types,amt = amt,price = price,id=id)
     flash_errors(form)
-    return render_template("item.html",form=form)
+    return redirect(url_for('purchase',id = id))
 
 @app.route("/get_specific_item/<item>")
 def get_item(item):
