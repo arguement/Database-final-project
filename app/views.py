@@ -43,6 +43,7 @@ def comment_sub():
             for j in rows:
                 tup = (j[1],j[0])
                 all_comments.append(tup)
+        mysql.connection.commit()
         return render_template("comments.html",fullname=fullname,comment=comment,all_comments=all_comments)
     return 'comment not added'
 
@@ -131,7 +132,7 @@ def purchase(id = None):
             query = f"select receipt_num from branch_{branch}.receipt where itemId = {id} and customerId={cusid}"
             cur.execute(query)
             receipt_num = cur.fetchone()[0]
-
+            mysql.connection.commit()
             flash("purchase complete","success")
             return render_template("receipt.html",item_name=res[0],price =res[1],amt = amt,id=id,receipt_num=receipt_num,cusid=cusid,branchnum=branch)
 
