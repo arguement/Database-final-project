@@ -30,7 +30,7 @@ def comment_sub():
         lname = res[1]
         fullname = fname + " "+ lname
         print("here")
-        query = f"insert into branch_{branch}.review(customerId,comments ) values({cusid},'{comment}')"
+        query = f"insert into branch_{session['branch']}.review(customerId,comments ) values({cusid},'{comment}')"
         print(query)
         cur.execute(query)
         return render_template("comments.html",fullname=fullname,comment=comment)
