@@ -86,10 +86,12 @@ def purchase(id = None):
                 if val > to_use[1]:
                     to_use[1] = val
                     to_use[0] = i
-                    newquery = f"select customerId from branch_{i}.owns where account_id = {temp_id} " 
+                    newquery = f"select customerId from branch_{session['branch']}.owns where account_id = {temp_id} " 
+                    
                     cur.execute(newquery)
                     another_id = cur.fetchone()[0]
-                    newquery = f"select customerId from branch_{i}.customer where customerId = {another_id} and credit_card_no = '{credit}' " 
+                    newquery = f"select customerId from branch_{session['branch']}.customer where customerId = {another_id} and credit_card_no = '{credit}' " 
+                    print(newquery)
                     new_res = cur.execute(newquery)
                     if new_res == 0:
                         flash("credit card doesnt match username","danger")
@@ -105,7 +107,10 @@ def purchase(id = None):
             # print(session['userid'])
             cusid = session["userid"] # dummy customer id
             # pucrhase table (itemId 	customerId 	purchase_amt )
-            # query = f'insert into purchase values({id},{cusid},{amt})'
+            cus_branch = session['branch']
+            query = f'insert into branch_{branch}.purchase values({id},{cusid},{amt},{ cus_branch } )'
+            cur.execute(query)
+
             query = f"select item_name,price from branch_{branch}.items where itemId = {id} "
             cur.execute(query)
             res = cur.fetchone()
