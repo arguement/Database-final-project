@@ -5,11 +5,35 @@ import os
 from app import mysql
 from app.forms import LoginForm,SignUpForm,PurchaseForm
 from datetime import datetime
+from functools import wraps
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session["login"] == False:
+            flash("login required","danger")
+            return redirect(url_for('home'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route("/")
 def home():
     form = LoginForm()
     return render_template("login.html",form= form)
+
+@app.route("/report")
+def report():
+    cur = mysql.connection.cursor()
+    branches = [None,None,None]
+    for i in range(1,4):
+        
+        query = f"SELECT sum(purchase_amt) FROM branch_{i}.`purchase_log`"
+        cur.execute(query)
+        res = cur.fetchone()[0]
+        bnum = i - 1
+        branches[bnum]= res
+    return render_template("reports.html",branches=branches)
 
 @app.route("/",methods=["POST","GET"])
 def comment_sub():
@@ -48,6 +72,7 @@ def comment_sub():
     return 'comment not added'
 
 @app.route("/search")
+@login_required
 def search():
     return render_template("search.html")
 
@@ -372,6 +397,14 @@ def add_header(response):
 # def page_not_found(error):
 #     """Custom 404 page."""
 #     return render_template('404.html'), 404
+
+# def login_required(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         if session["login"] == False:
+#             return redirect(url_for('home'))
+#         return f(*args, **kwargs)
+#     return decorated_function
 
 @app.context_processor
 def utility_processor():

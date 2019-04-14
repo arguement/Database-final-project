@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block js %}
+
+{% endblock %}
+
 {% block main %}
 
 <div class="container-fluid  dashboard-content">
@@ -27,36 +31,28 @@
                     <div class="card">
                         <h5 class="card-header">Basic Table</h5>
                         <div class="card-body">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">First</th>
-                                        <th scope="col">Last</th>
-                                        <th scope="col">Handle</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>Jacob</td>
-                                        <td>Thornton</td>
-                                        <td>@fat</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>Larry</td>
-                                        <td>the Bird</td>
-                                        <td>@twitter</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Branch</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">Handle</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for i in range(1,4) %}
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>Branch</td>
+                                            <td>{{ branches[i-1] }}</td>
+                                            <td>@mdo</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -67,6 +63,17 @@
                 <!-- striped table -->
                 <!-- ============================================================== -->
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="start-date">Start date</label>
+                            <input type="date" name="" id="start-date" class="form-control">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="end-date">End date</label>
+                            <input type="date" name="" id="end_date" class="form-control">
+                        </div>
+                    </div>
+
                     <div class="card">
                         <h5 class="card-header">Striped Table</h5>
                         <div class="card-body">
