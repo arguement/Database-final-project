@@ -26,6 +26,7 @@ def home():
 def report():
     cur = mysql.connection.cursor()
     branches = [None,None,None]
+    top_sales = []
     for i in range(1,4):
         
         query = f"SELECT sum(purchase_amt) FROM branch_{i}.`purchase_log`"
@@ -33,7 +34,30 @@ def report():
         res = cur.fetchone()[0]
         bnum = i - 1
         branches[bnum]= res
-    return render_template("reports.html",branches=branches)
+    for i in range(1,4):
+        query = f"SELECT item_name,sum(purchase_amt) FROM branch_{i}.`purchase` join branch_{i}.items on items.itemId=purchase.itemId GROUP BY branch_{i}.items.itemId limit 3"
+        cur.execute(query)
+        res = cur.fetchall()
+        print(res)
+        temp = []
+        for b in res:
+            temp.append(b)
+        top_sales.append(temp)
+    return render_template("reports.html",branches=branches,top_sales=top_sales)
+
+@app.route("/report/<start>/<end>")
+def dateBetween(start,end):
+    
+    cur = mysql.connection.cursor()
+    branches = [None,None,None]
+    for i in range(1,4):
+        
+        query = f"SELECT sum(purchase_amt) FROM branch_{i}.`purchase_log` where purchase_date BETWEEN '{start}' and '{end}'"
+        cur.execute(query)
+        res = cur.fetchone()[0]
+        bnum = i - 1
+        branches[bnum]= res
+    return jsonify(branches)
 
 @app.route("/",methods=["POST","GET"])
 def comment_sub():
