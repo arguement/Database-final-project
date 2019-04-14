@@ -141,31 +141,33 @@
                                     </tr>
                                 </tbody>
                             </table> -->
-                            {% for i in top_sales %}
+                            {% for i in range(3) %}
                             <table class="table">
-                                
+                                    
                                     <thead class="thead-dark">
                                       <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">First</th>
-                                        <th scope="col">Last</th>
+                                        <th scope="col">branch # {{ i+1 }}</th>
+                                        <th scope="col">Laptop Name</th>
+                                        <th scope="col">Total Sales</th>
                                         <th scope="col">Handle</th>
                                       </tr>
                                     </thead>
                                     <tbody>
                                     
-                                    {% for j in i %}
+                                    {% for j in top_sales[i] %}
                                         
-                                      <tr>
+                                      <tr class="table-success">
                                         <th scope="row">{{ 1 }}</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
+                                        <td>{{ j[0] }}</td>
+                                        <td>{{ j[1] }}</td>
                                         <td>@mdo</td>
                                       </tr>
-                                    {% endfor %} 
+                                    {% endfor %}  
+
+                                    
                                     </tbody>
                                   </table>
-                                {% endfor %} 
+                             {% endfor %}
                                   <!-- <table class="table">
                                     <thead class="thead-light">
                                       <tr>
