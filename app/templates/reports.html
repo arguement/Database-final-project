@@ -155,13 +155,21 @@
                                     <tbody>
                                     
                                     {% for j in top_sales[i] %}
-                                        
+                                        {% if loop.index == 1 %}
                                       <tr class="table-success">
-                                        <th scope="row">{{ 1 }}</th>
+                                        <th scope="row">{{ loop.index }}</th>
                                         <td>{{ j[0] }}</td>
                                         <td>{{ j[1] }}</td>
                                         <td>@mdo</td>
                                       </tr>
+                                        {% else %}
+                                        <tr>
+                                                <th scope="row">{{ loop.index }}</th>
+                                                <td>{{ j[0] }}</td>
+                                                <td>{{ j[1] }}</td>
+                                                <td>@mdo</td>
+                                        </tr>
+                                      {% endif %}
                                     {% endfor %}  
 
                                     

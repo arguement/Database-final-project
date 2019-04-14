@@ -245,7 +245,8 @@ def store():
         result = 0
         for i in range(1,4):
        
-            query = f"SELECT * FROM branch_{i}.account where username = '{user}' and `password` ='{passw}' "
+            # query = f"SELECT * FROM branch_{i}.account where username = '{user}' and `password` ='{passw}' "
+            query = f"call branch_{i}.passcheck('{user}','{passw}')"
             print(query)
             
             result =cur.execute(query)
@@ -322,7 +323,8 @@ def add_sign_up_data_to_branch(branch,fname,lname,credit_card,password,email):
             flash("credit card already exist","danger")
             return redirect(url_for("SignUp"))
 
-        query = f"insert into branch_1.account(username,password) values('{email}' ,'{password}') "
+        # query = f"insert into branch_1.account(username,password) values('{email}' ,'{password}') "
+        query = f"call branch_1.signup('{email}','{password}')"
         cur.execute(query)
         
         query2 = f"insert into branch_1.customer(lname,fname,credit_card_no) values('{lname}' ,'{fname}','{credit_card}')"
