@@ -184,7 +184,8 @@ def purchase(id = None):
                 if val > to_use[1]:
                     to_use[1] = val
                     to_use[0] = i
-                    newquery = f"select customerId from branch_{session['branch']}.owns where account_id = {temp_id} " 
+                    a = session["accid"]
+                    newquery = f"select customerId from branch_{session['branch']}.owns where account_id = { a } " 
                     
                     cur.execute(newquery)
                     another_id = cur.fetchone()[0]
@@ -290,11 +291,20 @@ def store():
             print(query)
             
             result =cur.execute(query)
+           
             print(result)
             if result > 0:
                 queryToUse = query
                 userfind = True
                 data = cur.fetchone()
+
+                query2 = f"select customerId from branch_{i}.owns where account_id = {data[0]}"
+                cur.execute(query2)
+
+                gtest = cur.fetchone()
+                session["accid"] = data[0]
+
+                data = gtest
                 session['branch'] = i
                 break
         if result == 0:
