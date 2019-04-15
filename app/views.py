@@ -46,10 +46,21 @@ def report():
         top_sales.append(temp)
     return render_template("reports.html",branches=branches,top_sales=top_sales)
 
-@app.route("/admin")
+@app.route("/admin",methods=["GET","POST"])
 def admin():
     form = AdminForm()
+    print(request.path)
     cur = mysql.connection.cursor()
+    if request.method == "POST" and form.validate_on_submit():
+        amt = form.amt.data
+        id = form.item_id.data
+        branch = form.branch.data
+        print(branch)
+        query = f"update branch_{branch}.items set item_amt = item_amt - {amt} where itemId = {id}"
+        cur.execute(query)
+        flash("purchase complete","success")
+        return redirect(url_for("admin"))
+    
     branches = [None,None,None]
     top_sales = []
     for i in range(1,4):
@@ -68,6 +79,7 @@ def admin():
         for b in res:
             temp.append(b)
         top_sales.append(temp)
+    flash_errors(form)
     return render_template("admin.html",branches=branches,top_sales=top_sales,form=form)
 
 @app.route("/report/<start>/<end>")
@@ -261,6 +273,8 @@ def store():
     if request.method == "POST" and form.validate_on_submit():
 
         cur = mysql.connection.cursor()
+        if form.username.data == "admin" and form.password.data == "admin":
+            return redirect(url_for('admin'))
 
         user = form.username.data
         passw = form.password.data + "\\"+"r"
@@ -466,7 +480,9 @@ def utility_processor():
         return session["login"]
     def getLoginName():
         return session["name"]
-    return dict(getDate=getDate,checkSession=checkSession,getLoginName=getLoginName)
+    def getRoute():
+        return request.args
+    return dict(getDate=getDate,checkSession=checkSession,getLoginName=getLoginName,getRoute=getRoute)
 
 def flash_errors(form):
     for field, errors in form.errors.items():

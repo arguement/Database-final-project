@@ -32,5 +32,7 @@ class AdminForm(FlaskForm):
     # password = PasswordField('Password', validators=[DataRequired()])
     item_id = StringField('Id of item', validators=[DataRequired()])
     amt = IntegerField("Amount Purchased",validators=[DataRequired()])
+    branch = SelectField('Branch', choices = [("1", 'Branch 1'), 
+      ("2", 'Branch 2'),("3","Branch 3")])
     
     
