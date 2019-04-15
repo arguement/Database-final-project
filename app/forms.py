@@ -26,5 +26,11 @@ class PurchaseForm(FlaskForm):
     # password = PasswordField('Password', validators=[DataRequired()])
     credit_card = StringField('credit card number', validators=[DataRequired(),Length(8,16)])
     amt = IntegerField("amount",validators=[DataRequired()])
+
+class AdminForm(FlaskForm):
+    # username = StringField('Username', validators=[DataRequired()])
+    # password = PasswordField('Password', validators=[DataRequired()])
+    item_id = StringField('Id of item', validators=[DataRequired()])
+    amt = IntegerField("Amount Purchased",validators=[DataRequired()])
     
     

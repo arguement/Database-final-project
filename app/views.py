@@ -3,7 +3,7 @@ from flask import render_template,request,redirect,url_for,flash,session,jsonify
 from werkzeug.utils import secure_filename
 import os
 from app import mysql
-from app.forms import LoginForm,SignUpForm,PurchaseForm
+from app.forms import LoginForm,SignUpForm,PurchaseForm,AdminForm
 from datetime import datetime
 from functools import wraps
 
@@ -19,6 +19,7 @@ def login_required(f):
 
 @app.route("/")
 def home():
+    session["login"] = False
     form = LoginForm()
     return render_template("login.html",form= form)
 
@@ -45,9 +46,33 @@ def report():
         top_sales.append(temp)
     return render_template("reports.html",branches=branches,top_sales=top_sales)
 
+@app.route("/admin")
+def admin():
+    form = AdminForm()
+    cur = mysql.connection.cursor()
+    branches = [None,None,None]
+    top_sales = []
+    for i in range(1,4):
+        
+        query = f"SELECT sum(purchase_amt) FROM branch_{i}.`purchase_log`"
+        cur.execute(query)
+        res = cur.fetchone()[0]
+        bnum = i - 1
+        branches[bnum]= res
+    for i in range(1,4):
+        query = f"SELECT item_name,sum(purchase_amt) FROM branch_{i}.`purchase` join branch_{i}.items on items.itemId=purchase.itemId GROUP BY branch_{i}.items.itemId limit 3"
+        cur.execute(query)
+        res = cur.fetchall()
+        print(res)
+        temp = []
+        for b in res:
+            temp.append(b)
+        top_sales.append(temp)
+    return render_template("admin.html",branches=branches,top_sales=top_sales,form=form)
+
 @app.route("/report/<start>/<end>")
 def dateBetween(start,end):
-    
+    print(start)
     cur = mysql.connection.cursor()
     branches = [None,None,None]
     for i in range(1,4):
@@ -56,7 +81,8 @@ def dateBetween(start,end):
         cur.execute(query)
         res = cur.fetchone()[0]
         bnum = i - 1
-        branches[bnum]= res
+        branches[bnum]= "%s" % res
+    print(branches)
     return jsonify(branches)
 
 @app.route("/",methods=["POST","GET"])
@@ -376,34 +402,34 @@ def add_sign_up_data_to_branch(branch,fname,lname,credit_card,password,email):
         cur.execute(query5)
         mysql.connection.commit()
     else:
-        checkuser = cur.execute(f"select * from branch_2.account where username= '{email}' ")
+        checkuser = cur.execute(f"select * from branch_3.account where username= '{email}' ")
         if checkuser > 0:
             flash("email already exist","danger")
             return redirect(url_for("SignUp"))
         
-        checkuser = cur.execute(f"select * from branch_2.customer where credit_card_no = '{credit_card}' ")
+        checkuser = cur.execute(f"select * from branch_3.customer where credit_card_no = '{credit_card}' ")
         if checkuser > 0:
             flash("credit card already exist","danger")
             return redirect(url_for("SignUp"))
 
-        query = f"insert into branch_2.account(username,password) values('{email}' ,'{password}') "
+        query = f"insert into branch_3.account(username,password) values('{email}' ,'{password}') "
         cur.execute(query)
         
-        query2 = f"insert into branch_2.customer(lname,fname,credit_card_no) values('{lname}' ,'{fname}','{credit_card}')"
+        query2 = f"insert into branch_3.customer(lname,fname,credit_card_no) values('{lname}' ,'{fname}','{credit_card}')"
         cur.execute(query2)
         
-        query3 = f"select account_id from branch_2.account where username = '{email}' and password = '{password}' "
+        query3 = f"select account_id from branch_3.account where username = '{email}' and password = '{password}' "
 
         account_id = cur.execute(query3)
         account_id = cur.fetchone()[0]
         print(f"customerId is {account_id }")
 
-        query4 = f"select customerId from branch_1.customer where lname = '{lname}' and fname= '{fname}' and  credit_card_no = '{credit_card}'  "
+        query4 = f"select customerId from branch_3.customer where lname = '{lname}' and fname= '{fname}' and  credit_card_no = '{credit_card}'  "
 
         customerId = cur.execute(query4)
         customerId = cur.fetchone()[0]
         print(f"customerId is {customerId}")
-        query5 = f"insert into branch_1.owns values({customerId},{account_id})"
+        query5 = f"insert into branch_3.owns values({customerId},{account_id})"
         cur.execute(query5)
         mysql.connection.commit()
 

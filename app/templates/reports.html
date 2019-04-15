@@ -1,11 +1,4 @@
-{% extends 'base.html' %}
 
-{% block js %}
-<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
-<script src="{{ url_for('static', filename='js/report.js') }}"></script>
-{% endblock %}
-
-{% block main %}
 
 <div class="container-fluid  dashboard-content" id="report">
         <!-- ============================================================== -->
@@ -30,7 +23,7 @@
                 <!-- ============================================================== -->
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="card">
-                        <h5 class="card-header">Basic Table</h5>
+                        <h5 class="card-header">Sales by branches</h5>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table">
@@ -39,7 +32,7 @@
                                             <th scope="col">#</th>
                                             <th scope="col">Branch</th>
                                             <th scope="col">Total</th>
-                                            <th scope="col">Handle</th>
+                                            <!-- <th scope="col">Handle</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -48,7 +41,7 @@
                                             <th scope="row">{{ i }}</th>
                                             <td>Branch</td>
                                             <td>{{ branches[i-1] }}</td>
-                                            <td>@mdo</td>
+                                            <!-- <td>@mdo</td> -->
                                         </tr>
                                     {% endfor %}
                                     </tbody>
@@ -64,6 +57,7 @@
                 <!-- striped table -->
                 <!-- ============================================================== -->
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                    
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="start-date">Start date</label>
@@ -76,7 +70,7 @@
                     </div>
 
                     <div class="card">
-                        <h5 class="card-header">Striped Table</h5>
+                        <h5 class="card-header">Sales by branches by date</h5>
                         <div class="card-body">
                             <table class="table table-striped">
                                 <thead>
@@ -84,15 +78,15 @@
                                         <th scope="col">#</th>
                                         <th scope="col">Branch</th>
                                         <th scope="col">Total</th>
-                                        <th scope="col">Handle</th>
+                                        <!-- <th scope="col">Handle</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="i in top_sales_based_on_time">
-                                            <th scope="row">1</th>
+                                    <tr v-for=" (i,j) in top_sales_based_on_time">
+                                            <th scope="row">[[ j+1 ]]</th>
                                             <td>Branch</td>
                                             <td>[[ i ]]</td>
-                                            <td>@mdo</td>
+                                            <!-- <td>@mdo</td> -->
                                     </tr>
                                     
                                 </tbody>
@@ -110,7 +104,7 @@
                 <!-- ============================================================== -->
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="card">
-                        <h5 class="card-header">Bordered Table</h5>
+                        <h5 class="card-header">Laptops models with top sales </h5>
                         <div class="card-body">
                             <!-- <table class="table table-bordered">
                                 <thead>
@@ -149,7 +143,7 @@
                                         <th scope="col">branch # {{ i+1 }}</th>
                                         <th scope="col">Laptop Name</th>
                                         <th scope="col">Total Sales</th>
-                                        <th scope="col">Handle</th>
+                                        <!-- <th scope="col">Handle</th> -->
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -160,14 +154,14 @@
                                         <th scope="row">{{ loop.index }}</th>
                                         <td>{{ j[0] }}</td>
                                         <td>{{ j[1] }}</td>
-                                        <td>@mdo</td>
+                                        <!-- <td>@mdo</td> -->
                                       </tr>
                                         {% else %}
                                         <tr>
                                                 <th scope="row">{{ loop.index }}</th>
                                                 <td>{{ j[0] }}</td>
                                                 <td>{{ j[1] }}</td>
-                                                <td>@mdo</td>
+                                                <!-- <td>@mdo</td> -->
                                         </tr>
                                       {% endif %}
                                     {% endfor %}  
@@ -217,7 +211,7 @@
                 <!-- ============================================================== -->
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="card">
-                        <h5 class="card-header">Hoverable Table</h5>
+                        <h5 class="card-header">Customer Puchases </h5>
                         <div class="card-body">
                             <table class="table table-hover">
                                 <thead>
@@ -225,7 +219,7 @@
                                         <th scope="col">#</th>
                                         <th scope="col">First</th>
                                         <th scope="col">Last</th>
-                                        <th scope="col">Handle</th>
+                                        <!-- <th scope="col">Handle</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -233,18 +227,18 @@
                                         <th scope="row">1</th>
                                         <td>Mark</td>
                                         <td>Otto</td>
-                                        <td>@mdo</td>
+                                        <!-- <td>@mdo</td> -->
                                     </tr>
                                     <tr>
                                         <th scope="row">2</th>
                                         <td>Jacob</td>
                                         <td>Thornton</td>
-                                        <td>@fat</td>
+                                        <!-- <td>@fat</td> -->
                                     </tr>
                                     <tr>
                                         <th scope="row">3</th>
                                         <td colspan="2">Larry the Bird</td>
-                                        <td>@twitter</td>
+                                        <!-- <td>@twitter</td> -->
                                     </tr>
                                 </tbody>
                             </table>
@@ -255,11 +249,11 @@
                 <!-- end hoverable table -->
                 <!-- ============================================================== -->
             </div>
-            <div class="row">
+            <!-- <div class="row"> -->
                 <!-- ============================================================== -->
                 <!-- contextual table -->
                 <!-- ============================================================== -->
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="card">
                         <h5 class="card-header">Contextual classes</h5>
                         <div class="card-body">
@@ -294,14 +288,14 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- ============================================================== -->
                 <!-- end contextual table -->
                 <!-- ============================================================== -->
                 <!-- ============================================================== -->
                 <!-- responsive table -->
                 <!-- ============================================================== -->
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="card">
                         <h5 class="card-header">Responsive Table</h5>
                         <div class="card-body">
@@ -338,12 +332,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- ============================================================== -->
                 <!-- end responsive table -->
                 <!-- ============================================================== -->
-            </div>
+            <!-- </div> -->
        
     </div>
 
-{% endblock %}

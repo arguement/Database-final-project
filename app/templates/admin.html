@@ -1,21 +1,53 @@
 {% extends 'base.html' %}
 
+{% block js %}
+<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+<script src="{{ url_for('static', filename='js/report.js') }}"></script>
+{% endblock %}
+
+
 {% block main %}
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
-        </li>
+        </li> -->
         <li class="nav-item">
           <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+            <div class="login-form text-center custom-middle">
+
+                <div class="form-container">
+            
+                  <h2>Log Item</h2>
+            
+                  {% include 'flash_messages.html' %}
+            
+                  <form action="{{url_for('admin')}}" method="post" >
+                    {{ form.csrf_token }}
+                    <div class="form-group">
+                      {{ form.item_id.label }}
+                      {{ form.item_id(class='form-control', placeholder="Enter item Id") }}
+                    </div>
+                    <div class="form-group">
+                      {{ form.amt.label }}
+                      {{ form.amt(class='form-control') }}
+                    </div>
+                    <button type="submit" name="submit" class="btn btn-primary btn-block">Log in</button>
+                  </form>
+            
+                </div>
+              </div>
+        </div>
+        <!-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div> -->
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            {% include 'reports.html' %}
       </div>
 {% endblock %}
