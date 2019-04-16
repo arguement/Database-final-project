@@ -297,7 +297,7 @@ def store():
                 queryToUse = query
                 userfind = True
                 data = cur.fetchone()
-
+                
                 query2 = f"select customerId from branch_{i}.owns where account_id = {data[0]}"
                 cur.execute(query2)
 
@@ -363,21 +363,27 @@ def add_sign_up_data_to_branch(branch,fname,lname,credit_card,password,email):
     cur = mysql.connection.cursor()
     query = ""
     if branch == "Branch 1":
+        print("in branch 1")
         checkuser = cur.execute(f"select * from branch_1.account where username= '{email}' ")
+        print(checkuser)
         if checkuser > 0:
             flash("email already exist","danger")
             return redirect(url_for("SignUp"))
         
         checkuser = cur.execute(f"select * from branch_1.customer where credit_card_no = '{credit_card}' ")
+        print(checkuser)
         if checkuser > 0:
             flash("credit card already exist","danger")
             return redirect(url_for("SignUp"))
 
         # query = f"insert into branch_1.account(username,password) values('{email}' ,'{password}') "
         query = f"call branch_1.signup('{email}','{password}')"
+        # query = cur.callproc('branch_1.signup',[f'{email}',f'{password}'])
+        print(query)
         cur.execute(query)
         
         query2 = f"insert into branch_1.customer(lname,fname,credit_card_no) values('{lname}' ,'{fname}','{credit_card}')"
+        print(query2)
         cur.execute(query2)
         
         query3 = f"select account_id from branch_1.account where username = '{email}' and password = '{password}' "
@@ -395,7 +401,8 @@ def add_sign_up_data_to_branch(branch,fname,lname,credit_card,password,email):
         cur.execute(query5)
         mysql.connection.commit()
     elif branch == "Branch 2":
-        checkuser = cur.execute(f"select * from branch_2.account where username= '{email}' ")
+        # checkuser = cur.execute(f"select * from branch_2.account where username= '{email}' ")
+        checkuser = cur.execute(f"CALL `columnselect`('account', 'username', '\'{email}\'');")
         if checkuser > 0:
             flash("email already exist","danger")
             return redirect(url_for("SignUp"))
