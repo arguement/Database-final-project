@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+
+{% block css %}
+<style>
+
+/*.head{
+  background-image: url("business-computer-contemporary-218863.jpg");
+  width: 100%;
+  height: 30vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: black;
+
+}*/
+.text1{
+  text-align: center;
+  color:  	#808080;
+}
+.d-block{
+  width: 100%;
+  /* height: 50vh; */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: black;
+
+  
+}
+@media only screen and (min-width: 900px) {
+  .d-block{
+    height: 50vh;  
+  }
+}
+@media only screen and (max-width: 768px) {
+  .d-block{
+    height: 30vh;  
+  }
+}
+
+.word{
+  color: white;
+  text-align: center;
+  padding: 50px;
+}
+.word2{
+  text-align: center;
+}
+img{
+  height: 30vh;
+
+  
+}
+/* @media only screen and (max-width: 900px) {
+  img{
+    height: 0vh;  
+  }
+} */
+.flex-container {
+  display: flex;
+  width: 100%
+}
+.top{
+  background-color: black;
+  width: 100%;
+  height: 1.5vh;
+  color: white;
+}
+.row{
+  text-align: center;
+
+}
+.col-md
+{background-color:#ededed;}
+.rating {
+  display: inline-block;
+  position: relative;
+  height: 50px;
+  line-height: 50px;
+  font-size: 50px;
+}
+
+.rating label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  cursor: pointer;
+}
+
+.rating label:last-child {
+  position: static;
+}
+
+.rating label:nth-child(1) {
+  z-index: 5;
+}
+
+.rating label:nth-child(2) {
+  z-index: 4;
+}
+
+.rating label:nth-child(3) {
+  z-index: 3;
+}
+
+.rating label:nth-child(4) {
+  z-index: 2;
+}
+
+.rating label:nth-child(5) {
+  z-index: 1;
+}
+
+.rating label input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.rating label .icon {
+  float: left;
+  color: transparent;
+}
+
+.rating label:last-child .icon {
+  color: #000;
+}
+
+.rating:not(:hover) label input:checked ~ .icon,
+.rating:hover label:hover input ~ .icon {
+  color: #09f;
+}
+
+.rating label input:focus:not(:checked) ~ .icon:last-child {
+  color: #000;
+  text-shadow: 0 0 5px #09f;
+}
+.container{
+  width: 1000px !important;
+}
+.listing{
+  border-left: 1px solid gray;
+  width: 80%;
+}
+.con{
+  display: flex;
+  height: 100vh;
+}
+.sidebar{
+  width:20%;
+  background-color:#fafafa;
+  text-align: center;
+  height: 100vh;
+
+}
+.nav1{
+  background-image: url("./images/business-computer-contemporary-218863.jpg");
+  background-size: cover;
+  color: white;
+
+}
+.info{
+  display: flex;
+  border-bottom: solid 1px;
+}
+.lst{
+  list-style-type: none;
+}
+.empty{
+  height: 5vh;
+  border:0px solid white;/*
+  -webkit-box-shadow: 10px 10px 31px 7px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 31px 7px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 31px 7px rgba(0,0,0,0.25);*/
+}
+
+
+</style>
+{% endblock %}
+
+{% block js %}
+
+
+
+<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+
+
+{% endblock %}
+
+
+{% block main %}
+
+<div class="form-group pull-right">
+    <input type="text" class="search form-control" placeholder="What you looking for?">
+    
+</div>
+    
+                    
+              
+
+
+<div id="search">
+    <div class="head">
+    
+        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+      
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+              <img class="d-block w-100" src="{{ url_for('static',filename = 'images/blurred-background-coffee-cup-computer-908284.jpg ') }}" alt="First slide">
+                    <div class="text1">
+                      <h6>Best Prices</h6>
+                      <h2>LAPTOPS</h2>
+                      <h5>HUAWEI MATEBOOK X PRO</h5>
+                    </div>
+          </div>
+          <div class="carousel-item">
+            <img class="d-block w-100" src="{{ url_for('static',filename = 'images/apple-mouse-artificial-flowers-blurred-background-1229861(1).jpg ') }}" alt="Second slide">
+                    <div class="text1">
+                      <h6>Best Prices</h6>
+                      <h2>LAPTOPS</h2>
+                      <h5>HUAWEI MATEBOOK X PRO</h5>
+                    </div>
+            </div>
+      
+          <div class="carousel-item">
+            <img class="d-block w-100" src="{{  url_for('static',filename='images/black-and-white-black-and-white-blur-34088.jpg') }}" alt="Third slide">
+                  <div class="text1">
+                    <h6>Best Prices</h6>
+                    <h2>LAPTOPS</h2>
+                    <h5>HUAWEI MATEBOOK X PRO</h5>
+                  </div>
+          </div>
+        </div>
+      </div>
+        <div class="word">
+      
+        </div>
+    
+    </div>
+    <div class="word2">
+      <h2>Featured Products</h2>
+      <h6>Lorem ipsum dolor sit amet, consectetur </h6>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md" @click="run( [[ laptops[0].itemId ]] )">
+          <img src="{{ url_for('static',filename ='images/laptop4.png') }}" alt="">
+          <p>[[ laptops[0].item_name ]]</p>
+         
+          <p>Price: $[[ laptops[1].price ]]</p>
+    
+        </div>
+        <div class="col-md" @click="run( [[ laptops[1].itemId ]] )" >
+          <img src="{{ url_for('static',filename ='images/laptop2.png') }}" alt="">
+          <p>[[ laptops[1].item_name ]]</p>
+          <p>Price: $[[ laptops[1].price ]]</p>
+        </div>
+        <div class="col-md" @click="run( [[ laptops[2].itemId ]] )">
+          <img src="{{ url_for('static',filename ='images/laptop3.png') }}" alt="">
+          <p>[[ laptops[2].item_name ]]</p>
+          <p>Price: $[[ laptops[2].price ]]</p>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+

@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired,Email,EqualTo,Length
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    username = StringField('Username (email)', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember me')
 
@@ -26,5 +26,13 @@ class PurchaseForm(FlaskForm):
     # password = PasswordField('Password', validators=[DataRequired()])
     credit_card = StringField('credit card number', validators=[DataRequired(),Length(8,16)])
     amt = IntegerField("amount",validators=[DataRequired()])
+
+class AdminForm(FlaskForm):
+    # username = StringField('Username', validators=[DataRequired()])
+    # password = PasswordField('Password', validators=[DataRequired()])
+    item_id = StringField('Id of item', validators=[DataRequired()])
+    amt = IntegerField("Amount Purchased",validators=[DataRequired()])
+    branch = SelectField('Branch', choices = [("1", 'Branch 1'), 
+      ("2", 'Branch 2'),("3","Branch 3")])
     
     
